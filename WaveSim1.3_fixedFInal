@@ -1,0 +1,93 @@
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.animation import FuncAnimation
+import tkinter as tk
+
+t = 0
+g = 9.81
+
+# "mesin gelombang" ANJAY GURINJAY FIXED GABOONG
+def update_gelombang(frame):
+    global t
+    t += 0.05
+
+    try:
+        h = float(input_h.get())
+        a = float(input_a.get())
+        T = float(input_T.get())
+
+        if h <= 0 or a <= 0 or T <= 0:
+            return garis,
+
+        omega = 2 * np.pi / T
+        c = np.sqrt(g * h)
+        k = omega / c
+
+        y = a * np.cos(k * x - omega * t)
+
+        garis.set_ydata(y)
+
+        ax.set_ylim(-h - 1, a + 2)
+
+    except ValueError:
+        pass
+
+    return garis,
+
+window = tk.Tk()
+window.title("wave sim fixed")
+
+# Input kedalaman
+tk.Label(window, text="Kedalaman (m):").pack()
+
+input_h = tk.Entry(window)
+input_h.insert(0, "5")
+input_h.pack()
+
+# Input amplitudo
+tk.Label(window, text="Amplitudo (m):").pack()
+
+input_a = tk.Entry(window)
+input_a.insert(0, "1")
+input_a.pack()
+
+# Input periode
+tk.Label(window, text="Periode (s):").pack()
+
+input_T = tk.Entry(window)
+input_T.insert(0, "4")
+input_T.pack()
+
+
+# bikin grafik
+fig, ax = plt.subplots(figsize=(6, 4))
+
+x = np.linspace(-50, 50, 300)
+
+garis, = ax.plot(x, np.zeros_like(x))
+
+ax.set_xlim(-50, 50)
+ax.set_ylim(-6, 3)
+ax.set_title("Grafik Gelombang")
+ax.set_xlabel("Jarak (m)")
+ax.set_ylabel("Ketinggian (m)")
+ax.grid(True)
+
+
+# grafik ke tkinter
+canvas = FigureCanvasTkAgg(fig, master=window)
+canvas.get_tk_widget().pack()
+
+
+# aniamasi 
+animasi = FuncAnimation(
+    fig,
+    update_gelombang,
+    interval=50,
+    blit=False
+)
+
+window.mainloop()
+
